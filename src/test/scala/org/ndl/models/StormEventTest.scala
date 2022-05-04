@@ -16,10 +16,11 @@ class StormEventTest extends AnyWordSpec with Matchers with BeforeAndAfterAll {
         "-78.3541"
       )
       val expected = StormEvent(
-        "20100706_1451",
         2010,
         7,
         6,
+        14,
+        51,
         950756,
         "Thunderstorm Wind",
         34.127f,

@@ -7,10 +7,11 @@ import scala.util.Try
 import java.time.temporal.ChronoUnit
 
 final case class StormEvent(
-    beginDateTime: String,
     beginYear: Int,
     beginMonth: Int,
     beginDay: Int,
+    beginHour: Int,
+    beginMinute: Int,
     eventId: Long,
     eventType: String,
     latitude: Float,
@@ -39,10 +40,11 @@ object StormEvent {
       val beginDateTimeString = utcBeginDateTime.format(targetFormatter)
 
       StormEvent(
-        beginDateTimeString,
         utcBeginDateTime.getYear(),
         utcBeginDateTime.getMonthValue(),
         utcBeginDateTime.getDayOfMonth(),
+        utcBeginDateTime.getHour(),
+        utcBeginDateTime.getMinute(),
         raw.event_id,
         raw.event_type,
         raw.begin_lat.toFloat,

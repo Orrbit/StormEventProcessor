@@ -146,10 +146,11 @@ object MainCsvReader extends LazyLogging {
 
     df.sparkSession
       .sql(s"""SELECT 
-                A.beginDateTime,
                 A.beginYear,
                 A.beginMonth,
                 A.beginDay, 
+                A.beginHour, 
+                A.beginMinute, 
                 A.eventId, 
                 A.eventType, 
                 A.latitude, 
@@ -157,7 +158,7 @@ object MainCsvReader extends LazyLogging {
                 A.stationId
                 FROM allEventRadarCombinations A
                 WHERE A.distance = (SELECT MIN(B.distance) FROM allEventRadarCombinations B WHERE A.eventId = B.eventId) AND A.distance < ${largestDistance}
-                ORDER BY A.beginYear, A.beginMonth, A.beginDay""")
+                ORDER BY A.beginYear, A.beginMonth, A.beginDay, A.beginHour, A.beginMinute""")
   }
 
   def saveDataframeToCSV(
