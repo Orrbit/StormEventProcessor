@@ -32,7 +32,7 @@ object MainCsvReader extends LazyLogging {
     val spark = SparkUtils.sparkSession(
       "spark-storm-radar-locations",
       "local[*]"
-    ) //TODO: put in config
+    )
 
     spark.udf.register("haversine", haversine)
 
@@ -57,13 +57,7 @@ object MainCsvReader extends LazyLogging {
     val eventsWithClosestRadar: DataFrame =
       joinWithClosestRadarStation(parsedEvents, parsedRadar)
 
-    eventsWithClosestRadar
-      .coalesce(1)
-      .write
-      .format("csv")
-      .option("header", "true")
-      .mode("overwrite")
-      .save(conf.outputResultFolder)
+    saveDataframeToCSV(eventsWithClosestRadar)
   }
 
   def loadRawStormEvents(
@@ -173,6 +167,10 @@ object MainCsvReader extends LazyLogging {
       .mode("overwrite")
       .save(conf.outputResultFolder)
 
+  //This function takes in two pairs of coordinates and returns an
+  //estimated distance between the two coordinates on the globe. The
+  //estimate assumes a radius of 6,378 km of Earth.
+  //Returned distance is in Kilometers    
   val haversine = (lat1: Float, lat2: Float, lon1: Float, lon2: Float) => {
     val radLat1 = lat1.toRadians
     val radLat2 = lat2.toRadians
